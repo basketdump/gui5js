@@ -13,7 +13,7 @@ class Pane {
   }
 
   setX(x) {
-    this.x = x;
+    this.x1 = x;
   }
 
   getY() {
@@ -21,7 +21,11 @@ class Pane {
   }
 
   setY(y) {
-    this.y = y;
+    this.y1 = y;
+  }
+
+  getRegion() {
+    return {"x1": this.x1, "y1": this.y1, "x2": this.x2, "y2": this.y2};
   }
 
   add(component) {
@@ -73,6 +77,10 @@ class Button extends Component {
     this.onClick = onClick;
   }
 
+  getRegion() {
+    return {"x1": this.x, "y1": this.y, "x2": this.x + this.w, "y2": this.y + this.l};
+  }
+
   draw() {
     fill(this.rgba[0], this.rgba[1], this.rgba[2], 255);
     rect(this.x, this.y, this.l, this.w);
@@ -83,23 +91,23 @@ class Button extends Component {
     text(this.text, this.x + this.w / 2, this.y + this.l / 2);
   }
 
-  test() {
-    console.log("Hello");
-  }
-
 }
 
 function mouseClicked() {
-  for(var i = 0; i < window_buttons.components.length; i++) {
-    if (mouseX >= window_buttons.components[i].getX() && mouseX <= window_buttons.components[i].getX() + window_buttons.components[i].w &&
-    mouseY >= window_buttons.components[i].getY() && mouseY <= window_buttons.components[i].getY() + window_buttons.components[i].l) {
-      window_buttons.components[i].test();
-      break;
+  // CREATE EVENT HANDLER THAT LOOPS INTELLIGENTLY
+  for (var i = 0; i < window_buttons.components.length; i++) {
+    if (inRegion(mouseX, mouseY, window_buttons.components[i].getRegion())) {
+      window_buttons.components[i].onClick();
     }
   }
 }
 
-var window_buttons = new Pane(980, 0, 1280, 100);
+function inRegion(x, y, region) {
+  return (x >= region.x1 && x <= region.x2 &&
+          y >= region.y1 && y <= region.y2);
+}
+
+var window_buttons = new Pane(300, 300, 600, 400);
 
 function setup() {
   // put setup code
@@ -109,9 +117,9 @@ function setup() {
     console.log("Hello");
   }
 
-  window_buttons.add(new Button(0, 0, 100, 100, [0, 120, 255], "Minimize", test));
-  window_buttons.add(new Button(100, 0, 100, 100, [0, 255, 0], "Maximize", test));
-  window_buttons.add(new Button(200, 0, 100, 100, [255, 0, 0], "Exit", test));
+  window_buttons.add(new Button(0, 0, 100, 100, [0, 120, 255], "Minimize", function() {console.log(this.text);}));
+  window_buttons.add(new Button(100, 0, 100, 100, [0, 255, 0], "Maximize", function() {console.log(this.text);}));
+  window_buttons.add(new Button(200, 0, 100, 100, [255, 0, 0], "Exit", function() {console.log(this.text);}));
 }
 
 function draw() {
