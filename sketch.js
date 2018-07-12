@@ -28,6 +28,14 @@ class Pane {
     return {"x1": this.x1, "y1": this.y1, "x2": this.x2, "y2": this.y2};
   }
 
+  getWidth() {
+    return this.x2 - this.x1;
+  }
+
+  getHeight() {
+    return this.y2 - this.y1;
+  }
+
   add(component) {
     this.components.push(component);
     component.setX(component.getX() + this.getX());
@@ -117,9 +125,9 @@ function setup() {
     console.log("Hello");
   }
 
-  window_buttons.add(new Button(0, 0, 100, 100, [0, 120, 255], "Minimize", function() {console.log(this.text);}));
-  window_buttons.add(new Button(100, 0, 100, 100, [0, 255, 0], "Maximize", function() {console.log(this.text);}));
-  window_buttons.add(new Button(200, 0, 100, 100, [255, 0, 0], "Exit", function() {console.log(this.text);}));
+  window_buttons.add(new Button(0, 0, window_buttons.getWidth() / 3, window_buttons.getHeight(), [0, 120, 255], "-", function() {console.log(this.text);}));
+  window_buttons.add(new Button(100, 0, window_buttons.getWidth() / 3, window_buttons.getHeight(), [0, 255, 0], "[]", function() {console.log(this.text);}));
+  window_buttons.add(new Button(200, 0, window_buttons.getWidth() / 3, window_buttons.getHeight(), [255, 0, 0], "x", function() {console.log(this.text);}));
 }
 
 function draw() {
